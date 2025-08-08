@@ -10,18 +10,19 @@ import { MessageTypes } from './utils/presets';
 
 function App() {
   const [file, setFile] = useState(null);
-  const [audioStream, setAudioStream] = useState(null);
+  const [audioStream, setAudioStream] = useState(false);
   const [output, setOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [finished, setFinished] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [transcription, setTranscription] = useState('');
 
 
   const isAudioAvailable = file || audioStream;
 
   function handleAudioReset() {
     setFile(null);
-    setAudioStream(null);
+    setAudioStream(false);
   }
 
   // Worker for handling transcription and translation in background
@@ -75,19 +76,27 @@ function App() {
   }
 
   async function handleFormSubmission() {
-    if (!file && !audioStream) {
-      console.error('No audio file or stream available');
-      return;
-    }
 
-    let audio = file ? file : audioStream;
-    const model_name = `openai/whisper-tiny.en`;
+    // if (!file && !audioStream) {
+    //   console.error('No audio file or stream available');
+    //   return;
+    // }
 
-    worker.current.postMessage({
-      type: MessageTypes.INFERENCE_REQUEST,
-      audio,
-      model_name
-    });
+
+    // let audio = file ? file : audioStream;
+    // const model_name = `openai/whisper-tiny.en`;
+
+    // worker.current.postMessage({
+    //   type: MessageTypes.INFERENCE_REQUEST,
+    //   audio,
+    //   model_name
+    // });
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOutput(true);
+      setFinished(true);
+    }, 1000);
   }
 
   return (
@@ -95,13 +104,13 @@ function App() {
       <section className='min-h-screen flex flex-col'>
         <Header />
         {output ? (
-          <Information />
+          <Information transcription={transcription}/>
         ) : loading ? (
           <Transcribing downloading={loading} />
         ) : isAudioAvailable ? (
           <FileDisplay handleFormSubmission={handleFormSubmission} handleAudioReset={handleAudioReset} file={file} audio={audioStream} />
         ) : (
-          <HomePage setFile={setFile} setAudioStream={setAudioStream} />
+          <HomePage setFile={setFile} setAudioStream={setAudioStream} setTranscription={setTranscription}/>
         )}
       </section>
       <footer>

@@ -1,7 +1,13 @@
-export default function Transcription() {
+import React from "react";
+export default function Transcription(props) {
+    const { transcription } = props;
     return (
         <div className="text-white">
-            Transcription
+            {transcription ? (
+                <p className="whitespace-pre-wrap">{transcription}</p>
+            ) : (
+                <p className="text-gray-400">No transcription available</p>
+            )}
         </div>
     )
 }
