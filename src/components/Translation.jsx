@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { LANGUAGES } from '../utils/presets';
 export default function Translation(props) {
-    const { translating, toLanguage, textElement, setTranslating, setTranslation, setToLanguage } = props; // Assuming translation is passed as a prop
+    const { translating, toLanguage, textElement, setToLanguage, generateTranslation } = props; // Assuming translation is passed as a prop
 
     return (
         <div className='flex flex-col mx-auto w-full bg-black gap-2 max-w-[400px]'>
@@ -9,7 +9,7 @@ export default function Translation(props) {
                 <p className='text-xs sm:text-sm font-medium text-slate-400 mr-auto'>To language</p>
                 <div className='flex items-stretch'>
                     <select value={toLanguage} onChange={(e) => setToLanguage(e.target.value)} className='bg-black border-2 border-solid border-green-400 text-white rounded-l px-4 py-2 focus:outline-none flex-1'>
-                        <option value="" disabled>Select Language</option>
+                        <option value="Select language" >Select language</option>
                         {Object.entries(LANGUAGES).map(([key, value]) => {
                             return (
                                 <option key={key} value={value}>{key}</option>
@@ -17,12 +17,12 @@ export default function Translation(props) {
                         })}
 
                     </select>
-                    <button className='specialBtn text-green-400 px-4 py-2 rounded-r hover:bg-black-600 duration-200'> Translate
+                    <button onClick={generateTranslation} className='specialBtn text-green-400 px-4 py-2 rounded-r hover:bg-black-600 duration-200'> Translate
                     </button>
                 </div>
             </div>)}
             {textElement && !translating && (
-                <p>{textElement}</p>
+                <p className='text-white whitespace-pre-wrap'>{textElement}</p>
             )}
             {translating && (
                 <div className='grid place-items-center'>

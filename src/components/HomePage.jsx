@@ -5,51 +5,13 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 export default function HomePage(props) {
     const { setFile, setAudioStream, setTranscription } = props;
     const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
-    
-
     const [recordingStatus, setRecordingStatus] = useState('inactive');
-    const [audioChunks, setAudioChunks] = useState([]);
     const [duration, setDuration] = useState(0);
-
-    const mediaRecorder = useRef(null);
-
-    const mimeType = 'audio/webm';
 
     async function startRecording() {
         SpeechRecognition.startListening();
-        setTranscription(transcript)
         setRecordingStatus('recording');
-        console.log("Recording started")
-        // let stream = null;
-        // console.log('Starting recording...');
-        // try {
-        //     //requests microphone access from user
-        //     const streamData = await navigator.mediaDevices.getUserMedia({ 
-        //         audio: true, 
-        //         video: false 
-        //     });
-        //     stream = streamData;
-        // } catch (err) {
-        //     console.log(err.message);
-        //     return;
-        // }
-        // setRecordingStatus('recording');
-
-        // //create new media recorder instance
-        // const media = new MediaRecorder(stream, { mimeType });
-        // mediaRecorder.current = media;
-
-        // //emits data every one second
-        // mediaRecorder.current.start(1000);
-        // let localAudioChunks = [];
-
-        // //everytime audio is available, push it to the array
-        // mediaRecorder.current.ondataavailable = (event) => {
-        //     if (typeof event.data === 'undefined') { return; }
-        //     if (event.data.size === 0) { return; }
-        //     localAudioChunks.push(event.data);
-        // }
-        // setAudioChunks(localAudioChunks);
+        console.log('Starting recording...');
     }
 
     async function stopRecording() {
@@ -59,16 +21,9 @@ export default function HomePage(props) {
         console.log("Recording stopped")
         console.log("Transcription: " + transcript)
         setAudioStream(true);
-        // console.log('Stopping recording...');
-
-        // mediaRecorder.current.stop();
-        // mediaRecorder.current.onstop = () => {
-        //     const audioBlob = new Blob(audioChunks, { type: mimeType });
-        //     setAudioStream(audioBlob);
-        //     setAudioChunks([]);
-        //     setDuration(0);
-            
-        // }
+        console.log('Stopping recording...');
+        setDuration(0);
+        resetTranscript();
     }
 
     //use for recording counter
